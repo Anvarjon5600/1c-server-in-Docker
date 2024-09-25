@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  cs:
+    build: ./srv
+    stdin_open: true
+    tty: true
+    command: ./start.sh
+    restart: unless-stopped
+    ports:
+      - "8087:8087"
+    depends_on:
+      - db
+  db:
+    image: postgres:12-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=cs_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./storage/postgres-data:/var/lib/postgresql/data
+      - ./db/init-cs-db.sql:/docker-entrypoint-initdb.d/init-cs-db.sql

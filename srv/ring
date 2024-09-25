@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# ----------------------------------------------------------------------------
+# Ring launcher
+#
+# Required environment variables:
+# JAVA_HOME - location of a Java installation directory.
+# Optional environment variables:
+# RING_OPTS - additional Java options
+# ----------------------------------------------------------------------------
+
+#if [ -z "$JAVA_HOME" ]; then
+#    echo Error: JAVA_HOME environment variable is not set.
+#    echo Please set the JAVA_HOME environment variable to the location of your Java installation.
+#    exit 1
+#fi
+
+#if [ ! -f "$JAVA_HOME"/bin/java ]; then
+#    echo Error: $JAVA_HOME/bin/java not found.
+#    echo Please set the JAVA_HOME environment variable to the location of your Java installation.
+#    exit 1;
+#fi;
+
+# Check whether we can use additional java options
+if [ -n "$RING_OPTS" ]; then
+    JAVA_ADD_OPTS=$RING_OPTS
+fi;
+
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
+RING_JAVA=$JAVA_HOME/bin/java
+RING_MAIN="com._1c.ring.cli.Ring"
+
+RING_CLASSPATH=$DIR/lib/*
+
+$RING_JAVA $JAVA_ADD_OPTS -cp "${RING_CLASSPATH}" $RING_MAIN "$@"
